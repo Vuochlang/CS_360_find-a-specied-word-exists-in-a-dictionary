@@ -23,13 +23,13 @@ int ok(char *dictionaryName, char *word, int length) {
 
     int fd = open(dictionaryName, O_RDWR);
     if (fd < 0) {
-        fprintf(stderr, "Error %d: cannot open file <%s>: %s\n", errno, dictionaryName, strerror(errno));
+        write(2, strerror(errno), strlen(strerror(errno)));
         return (errno);
     }
 
     int lastLine = lseek(fd, 0, SEEK_END); // get the total bytes of the file
     if (lastLine < 0) {
-        fprintf(stderr, "Error %d: %s\n", errno, strerror(errno));
+        write(2, strerror(errno), strlen(strerror(errno)));
         close(fd);
         return (errno);
     }
@@ -64,7 +64,7 @@ int ok(char *dictionaryName, char *word, int length) {
         buffer[length - 1] = '\0';
 
         if (readResult < 0) {
-            fprintf(stderr, "Error %d reading file: %s\n", errno, dictionaryName);
+            write(2, strerror(errno), strlen(strerror(errno)));
             return (errno);
         }
         if (readResult == 0) { // in case, there is only one line in the given file
